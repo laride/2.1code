@@ -13,8 +13,8 @@
   "font": "Fira Code",
   "font_size": 14,
   "terminal_padding": [
-    8,
-    10
+    0,
+    0
   ],
   "background": "background",
   "divider": {
