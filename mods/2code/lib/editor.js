@@ -4,6 +4,7 @@
 // shared "2code.editors": { [tabId]: { path, on } } maps tabs to files, and
 // shared "2code.dirty": { [fileKey]: true } marks unsaved ones.
 import { spaces, run, shared, setShared } from "herdr";
+import { rememberLocation } from "./context.js";
 
 export const fileKey = (path, on) => `${on ?? ""}:${path}`;
 export const baseName = (path) => path.split(/[\\/]/).pop() || path;
@@ -15,6 +16,13 @@ export function editorTabs() {
 
 export function editorOf(tabId) {
   return editorTabs()[tabId] ?? null;
+}
+
+export function registerEditor(tab, { path, on = null, root }) {
+  const all = editorTabs(), previous = all[tab];
+  const entry = { path, on, ...(root ? { root } : {}) };
+  if (previous?.path === path && previous.on === on && previous.root === entry.root) return;
+  setShared("2code.editors", { ...all, [tab]: entry });
 }
 
 export function isDirty(path, on) {
@@ -37,15 +45,19 @@ export function pruneEditors() {
 
 // Shows a file: its tab if one is open in the space, else a new tab.
 export async function openFile(cx, { space, path, on = null, root }) {
-  const s = spaces().find((x) => x.id === space) ?? spaces().find((x) => x.active);
+  const s = space ? spaces().find((x) => x.id === space) : spaces().find((x) => x.active);
   if (!s) return;
   const mine = new Set(s.tabs.map((t) => t.id));
   const open = Object.entries(editorTabs()).find(([id, e]) => mine.has(id) && e.path === path && (e.on ?? null) === (on ?? null));
-  if (open) return run("tab.select", { id: open[0] });
+  if (root) rememberLocation(s, { cwd: root, on });
+  if (open) {
+    registerEditor(open[0], { path, on, root: root || open[1].root });
+    return run("tab.select", { id: open[0] });
+  }
   run("tab.new", { space: s.id, name: baseName(path), mod: "2code", props: { part: "editor", path, on, root } });
   for (let i = 0; i < 40; i++) {
-    const tab = spaces().find((x) => x.id === s.id)?.tabs.find((t) => !mine.has(t.id));
-    if (tab) { setShared("2code.editors", { ...editorTabs(), [tab.id]: { path, on } }); return; }
+    const tab = spaces().find((x) => x.id === s.id)?.tabs.find((t) => !mine.has(t.id) && t.name === baseName(path));
+    if (tab) { registerEditor(tab.id, { path, on, root }); return; }
     await cx.sleep(50);
   }
 }

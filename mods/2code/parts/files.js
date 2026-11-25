@@ -4,18 +4,16 @@
 // ../NOTICE); changed to 2code's flat look and behavior, translated text.
 import { div, image } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { spaces, panes, focused, exec, watchFolder, theme, settings, window, shared, openOverlay } from "herdr";
+import { spaces, exec, watchFolder, theme, settings, window, shared, openOverlay } from "herdr";
 import { t } from "../lib/i18n.js";
-import { READ } from "../lib/git.js";
+import { READ, here } from "../lib/git.js";
 import { icon } from "../lib/ui.js";
 import { fileIcon } from "../lib/fileIcons.js";
 import { openFile } from "../lib/editor.js";
 
 function location() {
-  const space = spaces().find((s) => s.active), f = focused();
-  const pane = f?.pane ? panes().find((p) => p.pane === f.pane) : null;
-  const on = f?.pane === null ? (f.terminal?.includes("/") ? f.terminal.split("/")[0] : null) : space?.machine ?? null;
-  return { cwd: pane?.cwd || f?.cwd || space?.folder, on, space: space?.id };
+  const { space, cwd, on } = here();
+  return { cwd, on, space: space?.id ?? null };
 }
 const key = () => JSON.stringify(location());
 const PER_FOLDER = 500, TOTAL = 5000;
@@ -77,11 +75,11 @@ export class Files {
   }
 
   refresh(cx) {
-    const { cwd, on } = location(), next = key();
+    const { cwd, on, space } = location(), next = key();
     if (next !== this.context?.key) {
       if (this.context) this.saved.set(this.context.key, { folders: this.folders });
       const saved = this.saved.get(next);
-      this.context = { key: next, cwd, on }; this.root = cwd; this.on = on; this.entries = new Map(); this.folders = new Set(saved?.folders);
+      this.context = { key: next, cwd, on, space }; this.root = cwd; this.on = on; this.entries = new Map(); this.folders = new Set(saved?.folders);
       this.pending = new Set(); this.marks = {}; this.dirty = new Set(); this.ignored = new Set(); this.watched = null; this.error = null; this.limited = false;
       this.loading = false;
     }
@@ -151,6 +149,7 @@ export class Files {
   rows(prefix, depth, out, th) {
     if (out.length >= TOTAL || depth > 40) return out;
     const dark = Boolean(settings().dark);
+    const source = { space: this.context?.space, on: this.on, root: this.root };
     for (const entry of this.entries.get(prefix) ?? []) {
       if (out.length >= TOTAL) break;
       const path = prefix ? `${prefix}/${entry.name}` : entry.name, open = this.folders.has(path);
@@ -158,7 +157,7 @@ export class Files {
       out.push(h_flex().id(`file-${path}`).h(24).flex_none().mx(4).pl(4 + depth * 12).pr(6).gap(5).items_center().rounded(4).cursor_pointer()
         .when(ignored, (el) => el.opacity(0.5))
         .text_color(mark ? markColor(mark, th) : th.muted).hover((s) => s.bg(th.hover).text_color(mark ? markColor(mark, th) : th.foreground))
-        .on_click((_e, cx) => (entry.dir ? this.toggle(path, cx) : cx.spawn(async (cx) => { await openFile(cx, { path: abs, on: this.on, root: this.root }); })))
+        .on_click((_e, cx) => (entry.dir ? this.toggle(path, cx) : cx.spawn(async (cx) => { await openFile(cx, { ...source, path: abs }); })))
         .on_mouse_down("right", (_e, cx) => { cx.stop_propagation(); this.menu(entry, path); })
         .child(entry.dir ? icon(open ? "chevron-down" : "chevron-right", 12).text_color(th.dim) : div().w(12).flex_none())
         .child(image(fileIcon(path, entry.dir, open, dark)).size(15).flex_none())

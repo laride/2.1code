@@ -102,9 +102,15 @@ Left to right:
   Folder, Rename (name dialogs), Copy Relative / Absolute Path, Refresh, Delete
   (to the trash with `/usr/bin/trash` or `gio trash`; when the trash refuses,
   the dialog shows why and offers Delete Permanently).
+- Files, Changes, the top bar and terminal actions share one directory context.
+  A terminal uses its live folder; a file tab retains the folder it was opened
+  from, including after a restart or after its terminals close. Each space
+  remembers its own last directory, so opening a preview never switches to
+  another project's folder or the space's original startup folder. Peeking at
+  an agent in another space leaves this context alone.
 - File tabs: each file is a Herdr tab whose only pane is the `editor` part
   (`tab.new {mod, props: {part, path, on, root}}`); shared `2code.editors`
-  maps tab ids to files, `2code.dirty` marks unsaved ones. `cmd-s` /
+  maps tab ids to files and their source roots, `2code.dirty` marks unsaved ones. `cmd-s` /
   `ctrl-s` (section `mod:2code`) saves with `writeTextFile(path, text,
   savedSnapshot)`; a rejected snapshot offers Reload / Overwrite. Every 3s the
   file is reread: taken silently when nothing is unsaved, else "changed on
@@ -156,7 +162,7 @@ Left to right:
   `branches`, `finder`, `filePrompt`, `fileDelete`, `unsaved` (dialogs).
   File icons: a 209-icon slice of material-icon-theme (MIT) built by
   `scripts/build-file-icons.mjs` into `lib/fileIcons.js` + `icons/files/`.
-  `lib/`: `i18n`, `git`, `config` (2code.json), `projects`, `changes` (git
+  `lib/`: `i18n`, `context` (shared directory resolution), `git`, `config` (2code.json), `projects`, `changes` (git
   work), `terminal`, `os` (reveal, avatars), `ui`.
 - Shipped mods used: `worktree` (New worktree), `menu` (tab menu). `files` and
   `changes` start from Herdr's shipped mods (Apache-2.0, `mods/2code/NOTICE`).
@@ -200,6 +206,9 @@ Left to right:
 
 ## Done when
 
+- `node --experimental-vm-modules tests/context.test.mjs` passes. Opening a file
+  keeps Files and Changes in its source directory even if the space was created
+  elsewhere; switching spaces or worktrees selects their own directories.
 - `herdr-app check mods/2code` passes and `layout.switch {name: "2code"}` shows
   no `herdr-app status` errors.
 - Closing a project's last tab leaves it in the sidebar; clicking its worktree

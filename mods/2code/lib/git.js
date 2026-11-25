@@ -1,4 +1,5 @@
-import { spaces, panes, focused, exec } from "herdr";
+import { panes, exec } from "herdr";
+import { currentLocation } from "./context.js";
 
 // Reads write nothing under .git, so a folder watch never feeds itself.
 export const READ = ["--no-optional-locks", "-c", "core.fsmonitor=false"];
@@ -25,13 +26,5 @@ export async function repoOf(folder, on) {
   return { main, top, name: main.split("/").pop(), linked: main !== top };
 }
 
-// The shown space, the focused folder there and its branch.
-export function here() {
-  const space = spaces().find((s) => s.active), f = focused();
-  const pane = f?.pane ? panes().find((p) => p.pane === f.pane) : null;
-  const cwd = pane?.cwd || f?.cwd || place(space) || null;
-  // A file tab's pane has no branch: take the one its space's terminals report.
-  const tabs = new Set((space?.tabs ?? []).map((t) => t.id));
-  const branch = pane?.branch ?? panes().find((p) => tabs.has(p.tab) && p.branch)?.branch ?? space?.branch ?? null;
-  return { space, cwd, on: space?.machine ?? null, branch };
-}
+// All project UI uses the same space-scoped directory, including file tabs.
+export const here = currentLocation;

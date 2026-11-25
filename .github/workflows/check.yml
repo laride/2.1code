@@ -33,6 +33,9 @@ jobs:
           done
           exit $status
 
+      - name: Test directory context
+        run: node --experimental-vm-modules tests/context.test.mjs
+
       - name: Validate JSON
         run: |
           for f in layouts/*.json themes/*.json mods/*/mod.json keys.json; do

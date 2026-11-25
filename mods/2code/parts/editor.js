@@ -10,7 +10,7 @@ import { theme, settings, shared, focused, readTextFile, writeTextFile, appHome,
 import * as fs from "fs/promises";
 import { t } from "../lib/i18n.js";
 import { fileIcon } from "../lib/fileIcons.js";
-import { fileKey, setDirty } from "../lib/editor.js";
+import { fileKey, setDirty, editorOf, registerEditor } from "../lib/editor.js";
 import { isImage, imageSize, fit } from "../lib/changes.js";
 import { button } from "../lib/ui.js";
 
@@ -198,6 +198,10 @@ export class EditorPart {
   render(cx) {
     const th = theme();
     shared("2code.locale");
+    // Migrate tabs opened before root was saved in shared editor metadata.
+    const tab = focused()?.tab, entry = editorOf(tab);
+    if (this.root && entry?.path === this.path && (entry.on ?? null) === this.on && !entry.root)
+      registerEditor(tab, { path: this.path, on: this.on, root: this.root });
     this.handleRequest(cx);
     const rel = this.root && this.path.startsWith(this.root + "/") ? this.path.slice(this.root.length + 1) : this.path;
     const seg = (mode, label) => div().id(`m-${mode}`).h(24).px(9).flex().items_center().rounded(5).cursor_pointer().text_size(12)
