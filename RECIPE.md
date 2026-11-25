@@ -161,8 +161,8 @@ Left to right:
 ## Built from
 
 - Layout `layouts/2code.json`: root `row` (`titlebar: none`, traffic lights
-  `[16, 19]`, theme `{light: 2code-light, dark: 2code-dark}`, JetBrains Mono
-  13, terminal padding `[8, 10]`) → `sidebar` column (`brand`, `projects`,
+  `[16, 19]`, theme `{light: 2code-light, dark: 2code-dark}`, Fira Code
+  14 (falls back to JetBrains Mono when unavailable), terminal padding `[8, 10]`) → `sidebar` column (`brand`, `projects`,
   `agents`, `sidebar-footer` blocks) and `work` column (`topbar` block, `work-body` row → `panel` stack
   [`files`, `changes`] and `terminal-area` column [`tabs` block, `main` tab block]).
 - One mod, `mods/2code`, every block `{mod: "2code", props: {part}}`. Parts:

@@ -10,8 +10,8 @@
     "light": "2code-light",
     "dark": "2code-dark"
   },
-  "font": "JetBrains Mono",
-  "font_size": 13,
+  "font": "Fira Code",
+  "font_size": 14,
   "terminal_padding": [
     8,
     10
