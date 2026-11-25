@@ -31,6 +31,10 @@ bring its code back here.
   when it resolves.
 - `parts/files.js` and `parts/changes.js` derive from Herdr's shipped mods
   (Apache-2.0): keep `NOTICE` and `LICENSE-Herdr.txt` with them.
+- `parts/agents.js` also derives from Herdr's agents mod. It is a part of
+  this mod, with its sort popup using `{part: "agents", sortMenu: true}`.
+  Keep its section folding separate from Herdr's per-group/sub-agent folding,
+  and publish `setAgentOrder` even while the whole section is folded.
 - `lib/`: `i18n`, `git`, `config` (2code.json), `projects` (the saved project
   list in shared `2code.projects`), `changes` (git status / diff / commit /
   history), `editor` (files as tabs: shared `2code.editors` / `2code.dirty`),

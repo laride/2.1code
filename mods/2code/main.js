@@ -3,7 +3,8 @@
 // lives here and the layout picks a part with `props.part`.
 import { View, div } from "gpui-kit";
 import { props, nextCommand } from "herdr";
-import { Sidebar, SidebarHeader } from "./parts/sidebar.js";
+import { Sidebar, SidebarHeader, SidebarFooter } from "./parts/sidebar.js";
+import { Agents } from "./parts/agents.js";
 import { Topbar } from "./parts/topbar.js";
 import { Tabs } from "./parts/tabs.js";
 import { Templates } from "./parts/templates.js";
@@ -24,6 +25,8 @@ import { Changes } from "./parts/changes.js";
 const PARTS = {
   header: SidebarHeader,
   sidebar: Sidebar,
+  agents: Agents,
+  footer: SidebarFooter,
   topbar: Topbar,
   tabs: Tabs,
   templates: Templates,

@@ -26,7 +26,11 @@ Left to right:
     worktree (checkout): branch icon, branch name (main checkout first), and
     an 18px slot with its agent dot, lined up under the caret. Worktrees
     without an open space are drawn in `dim`.
-  - Footer: Settings (Herdr's settings).
+  - A collapsible Agents section above Settings: 34px when folded (the default),
+    280px when expanded. Its 33px header has a chevron, agent count, a yellow
+    attention count when needed, and a sort menu while expanded. The section
+    remembers its state. Projects and agents scroll independently.
+  - Independent 42px footer: Settings (Herdr's settings).
   - Narrower than 160px: only 24px project tiles with their dots.
 - **Work column**:
   - 52px top bar (`background`, bottom border; on macOS, when the sidebar is
@@ -76,6 +80,12 @@ Left to right:
   yellow (`#facc15`), `done` green (`#22c55e`), `idle` nothing. A folded
   project (and a rail tile) shows its most urgent worktree's status; an open
   one shows none, since its worktrees show theirs.
+- The Agents list follows Herdr's priority/grouped views, pinning, elapsed
+  status time, sub-agent trees and click-to-focus/peek actions. The section can
+  be folded without losing agent navigation order or attention counts. In the
+  narrow rail it keeps a compact chevron/count header. Its labels follow the
+  same English/Chinese locale as the rest of the layout. Its working indicator
+  is Herdr's native spinning icon, and idle agents have an outlined dot.
 - Projects are the shared list `2code.projects` (`[{path, machine, name?}]`).
   Every 4s the sidebar adds the repo of each open space (its main checkout:
   `git rev-parse --git-common-dir`) and reads each project's
@@ -152,11 +162,11 @@ Left to right:
 
 - Layout `layouts/2code.json`: root `row` (`titlebar: none`, traffic lights
   `[16, 19]`, theme `{light: 2code-light, dark: 2code-dark}`, JetBrains Mono
-  13, terminal padding `[8, 10]`) → `sidebar` column (`brand`, `projects`
-  blocks) and `work` column (`topbar` block, `work-body` row → `panel` stack
+  13, terminal padding `[8, 10]`) → `sidebar` column (`brand`, `projects`,
+  `agents`, `sidebar-footer` blocks) and `work` column (`topbar` block, `work-body` row → `panel` stack
   [`files`, `changes`] and `terminal-area` column [`tabs` block, `main` tab block]).
 - One mod, `mods/2code`, every block `{mod: "2code", props: {part}}`. Parts:
-  `header`, `sidebar`, `topbar`, `tabs`, `files`, `changes`, `editor` (a tab),
+  `header`, `sidebar`, `agents`, `footer`, `topbar`, `tabs`, `files`, `changes`, `editor` (a tab),
   and overlays `menu`, `templates`, `openIn`, `fileMenu` (popups), `rename`,
   `removeProject`, `deleteProfile`, `projectSettings`, `diff`, `review`,
   `branches`, `finder`, `filePrompt`, `fileDelete`, `unsaved` (dialogs).
@@ -165,7 +175,8 @@ Left to right:
   `lib/`: `i18n`, `context` (shared directory resolution), `git`, `config` (2code.json), `projects`, `changes` (git
   work), `terminal`, `os` (reveal, avatars), `ui`.
 - Shipped mods used: `worktree` (New worktree), `menu` (tab menu). `files` and
-  `changes` start from Herdr's shipped mods (Apache-2.0, `mods/2code/NOTICE`).
+  `changes` start from Herdr's shipped mods; `agents` is adapted from Herdr
+  0.1.18's agents mod inside the same mod folder (Apache-2.0, `mods/2code/NOTICE`).
 - `herdr` calls: `spaces`, `panes`, `focused`, `layout`, `theme`, `settings`,
   `shared` / `setShared`, `exec`, `hc` (`send`), `readTextFile`,
   `writeTextFile`, `watchFolder`, `pickFolder`, `openOverlay` /
@@ -206,6 +217,9 @@ Left to right:
 
 ## Done when
 
+- The Agents header starts folded, expands/collapses on click and remembers its
+  state. Agent rows, grouping, sort popup, pinning, sub-agent peeks and navigation
+  still work, and Settings stays below the section in both wide and rail modes.
 - `node --experimental-vm-modules tests/context.test.mjs` passes. Opening a file
   keeps Files and Changes in its source directory even if the space was created
   elsewhere; switching spaces or worktrees selects their own directories.

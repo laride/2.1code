@@ -59,6 +59,22 @@ export class SidebarHeader {
   }
 }
 
+// An independent bottom bar leaves room for the collapsible Agents section.
+export class SidebarFooter {
+  render() {
+    const th = theme();
+    const narrow = (find(layout(), "sidebar")?.size?.px ?? 250) < RAIL;
+    shared("2code.locale");
+    return v_flex().size_full().bg(th.chrome)
+      .child(h_flex().id("settings").h(32).flex_none().mx(8).mb(10)
+        .px(narrow ? 0 : 8).gap(8).items_center().rounded(6).cursor_pointer()
+        .when(narrow, (el) => el.justify_center())
+        .text_color(th.muted).hover((s) => s.bg(th.hover).text_color(th.foreground))
+        .on_click(() => run("app.settings"))
+        .child(icon("settings", 15)).when(!narrow, (el) => el.child(t("settings"))));
+  }
+}
+
 export class Sidebar {
   static COMMANDS = ["focusSidebar"];
 
@@ -286,12 +302,7 @@ export class Sidebar {
           this.projectRow(p, th),
           ...(this.closed[p.key] ? [] : p.profiles.map((x) => this.profileRow(p, x, th))),
         ]))
-        .when(!projects.length, (el) => el.child(div().p(8).text_color(th.dim).child(t("noProjects")))))
-      .child(h_flex().id("settings").h(32).mx(8).mb(10).px(narrow ? 0 : 8).gap(8).items_center().rounded(6).cursor_pointer()
-        .when(narrow, (el) => el.justify_center())
-        .text_color(th.muted).hover((s) => s.bg(th.hover).text_color(th.foreground))
-        .on_click(() => run("app.settings"))
-        .child(icon("settings", 15)).when(!narrow, (el) => el.child(t("settings"))));
+        .when(!projects.length, (el) => el.child(div().p(8).text_color(th.dim).child(t("noProjects")))));
   }
 }
 

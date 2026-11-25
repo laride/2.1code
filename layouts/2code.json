@@ -54,9 +54,42 @@
             "props": {
               "part": "sidebar"
             }
+          },
+          "size": {
+            "weight": 1
+          },
+          "min": 90
+        },
+        {
+          "id": "agents",
+          "type": "block",
+          "size": {
+            "px": 34
+          },
+          "min": 34,
+          "max": 420,
+          "content": {
+            "mod": "2code",
+            "props": {
+              "part": "agents"
+            }
+          }
+        },
+        {
+          "id": "sidebar-footer",
+          "type": "block",
+          "size": {
+            "px": 42
+          },
+          "content": {
+            "mod": "2code",
+            "props": {
+              "part": "footer"
+            }
           }
         }
-      ]
+      ],
+      "resizable": false
     },
     {
       "id": "work",
@@ -163,5 +196,5 @@
       ]
     }
   ],
-  "preview": "layouts/2code.png"
+  "preview": "layouts/2code.svg"
 }

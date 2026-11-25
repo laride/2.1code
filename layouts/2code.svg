@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="450" viewBox="0 0 720 450">
+  <rect width="720" height="450" rx="12" fill="#161616"/>
+  <path d="M12 0H182V450H12Q0 450 0 438V12Q0 0 12 0" fill="#0a0a0a"/>
+  <g fill="none" stroke="#333"><path d="M182 0V450M182 48H720M182 81H720M0 371H182M0 406H182"/></g>
+  <g font-family="Arial,sans-serif" font-size="12" fill="#d4d4d4">
+    <text x="18" y="28" font-size="16" fill="#fafafa">Herdr</text>
+    <text x="18" y="65" fill="#a1a1a1">Projects</text>
+    <text x="157" y="65">+</text>
+    <text x="25" y="100">Project</text>
+    <text x="40" y="124" fill="#a1a1a1">main</text>
+    <text x="25" y="159">Workstation</text>
+    <rect x="10" y="169" width="162" height="28" rx="5" fill="#262626"/>
+    <text x="40" y="188">feature/sidebar</text>
+    <text x="215" y="29" fill="#fafafa">Workstation</text>
+    <text x="325" y="29" fill="#a1a1a1">feature/sidebar</text>
+    <text x="205" y="69">Terminal</text>
+    <text x="228" y="113" font-family="monospace" fill="#729098">$</text>
+    <text x="16" y="393" fill="#a1a1a1">&#x25B6; Agents · 3</text>
+    <circle cx="117" cy="389" r="3" fill="#facc15"/>
+    <text x="125" y="393" fill="#facc15" font-size="10">1 need you</text>
+    <text x="18" y="432" fill="#a1a1a1">Settings</text>
+  </g>
+  <path d="M201 80H275" stroke="#fafafa" stroke-width="2"/>
+</svg>

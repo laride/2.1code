@@ -6,6 +6,10 @@ defaults/mods/), licensed under the Apache License 2.0 (LICENSE-Herdr.txt).
 They were changed for 2code: restyled to 2code's flat panels, git colors and
 status badges, selective commits with a description, and translated text.
 
+parts/agents.js is derived from Herdr 0.1.18's shipped `agents` mod, under
+the same Apache License 2.0 (LICENSE-Herdr.txt). It adds a persistent
+collapsible section, agent and attention counts, and translated text.
+
 Icons in icons/ are from Lucide (https://lucide.dev), ISC license
 (icons/LICENSE-Lucide.txt), as shipped with Herdr's mods.
 

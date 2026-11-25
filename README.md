@@ -33,6 +33,9 @@ herdr-app do layout.switch --name 2code
 
 ## What it adds to Herdr
 
+- **Collapsible Agents list.** Below projects, above Settings: agent and
+  attention counts, priority or space grouping, pinning, sub-agents and quick
+  terminal navigation. Folded by default; remembers its expanded state.
 - **Projects and worktrees.** Projects stay in the sidebar (only their paths
   are kept, in Herdr's shared state); a space opened on a new repo adds it.
   Under each project, its worktrees come from `git worktree list`: the main
